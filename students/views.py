@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from .models import Student
-from .forms import StudentForm
+from django.shortcuts import render, get_object_or_404, redirect  # Import necessary functions
+from django.contrib import messages  # Import Django's messages framework
+from .models import Student  # Import the Student model
+from .forms import StudentForm  # Import the Student form
 
 def student_list(request):
     students = Student.objects.all()
@@ -16,8 +16,10 @@ def student_create(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Student added successfully!")
+            messages.success(request, "✅ Student added successfully!")  # Success message
             return redirect('student_list')
+        else:
+            messages.error(request, "❌ Failed to add student. Please check the form.")  # Error message
     else:
         form = StudentForm()
     return render(request, 'students/student_form.html', {'form': form})
@@ -28,8 +30,10 @@ def student_update(request, pk):
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
-            messages.success(request, "Student updated successfully!")
+            messages.success(request, "✅ Student updated successfully!")  # Success message
             return redirect('student_list')
+        else:
+            messages.error(request, "❌ Failed to update student. Please check the form.")  # Error message
     else:
         form = StudentForm(instance=student)
     return render(request, 'students/student_form.html', {'form': form})
@@ -37,5 +41,6 @@ def student_update(request, pk):
 def student_delete(request, pk):
     student = get_object_or_404(Student, pk=pk)
     student.delete()
-    messages.success(request, "Student deleted successfully!")
+    messages.success(request, "❌ Record deleted!")  # Success message
     return redirect('student_list')
+
